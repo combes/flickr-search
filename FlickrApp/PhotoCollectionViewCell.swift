@@ -10,7 +10,7 @@ import UIKit
 
 class PhotoCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
- 
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
@@ -22,11 +22,12 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             return
         } 
         
-        do {
-            let data = try Data(contentsOf: url)
-            imageView.image = UIImage(data: data)
-        } catch let error {
-            print(error.localizedDescription)
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url) {
+                DispatchQueue.main.async {
+                    self.imageView.image = UIImage(data: data)
+                }
+            }
         }
     }
 }

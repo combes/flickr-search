@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		834D622822906FB4001F9CD1 /* UIView+ClassName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834D622722906FB4001F9CD1 /* UIView+ClassName.swift */; };
 		839041D9228F1B2C00B2F432 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839041D8228F1B2C00B2F432 /* AppDelegate.swift */; };
 		839041DB228F1B2C00B2F432 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839041DA228F1B2C00B2F432 /* ViewController.swift */; };
 		839041DE228F1B2C00B2F432 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839041DC228F1B2C00B2F432 /* Main.storyboard */; };
@@ -31,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		834D622722906FB4001F9CD1 /* UIView+ClassName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ClassName.swift"; sourceTree = "<group>"; };
 		839041D5228F1B2C00B2F432 /* FlickrApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839041D8228F1B2C00B2F432 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		839041DA228F1B2C00B2F432 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -65,6 +67,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		834D622622906F96001F9CD1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				834D622722906FB4001F9CD1 /* UIView+ClassName.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		839041CC228F1B2C00B2F432 = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +97,7 @@
 		839041D7228F1B2C00B2F432 /* FlickrApp */ = {
 			isa = PBXGroup;
 			children = (
+				834D622622906F96001F9CD1 /* Extensions */,
 				839041D8228F1B2C00B2F432 /* AppDelegate.swift */,
 				839041DA228F1B2C00B2F432 /* ViewController.swift */,
 				839041DC228F1B2C00B2F432 /* Main.storyboard */,
@@ -212,6 +223,7 @@
 			files = (
 				839041DB228F1B2C00B2F432 /* ViewController.swift in Sources */,
 				839041FF228F249100B2F432 /* PhotoCollectionViewCell.swift in Sources */,
+				834D622822906FB4001F9CD1 /* UIView+ClassName.swift in Sources */,
 				839041FC228F1C4700B2F432 /* Photo.swift in Sources */,
 				839041D9228F1B2C00B2F432 /* AppDelegate.swift in Sources */,
 				839041F9228F1B5800B2F432 /* FlickrService.swift in Sources */,

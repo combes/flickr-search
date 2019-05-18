@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FlickrApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="vjG-tX-4SN">
+                                <rect key="frame" x="0.0" y="44" width="414" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="0GZ-p6-V10"/>
+                                </connections>
+                            </searchBar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Saf-Gu-Qf2">
+                                <rect key="frame" x="0.0" y="100" width="414" height="762"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="uVW-qX-6kq">
+                                    <size key="itemSize" width="100" height="100"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="12" minY="0.0" maxX="2" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCollectionViewCell" id="Fuf-2k-fDF" customClass="PhotoCollectionViewCell" customModule="FlickrApp" customModuleProvider="target">
+                                        <rect key="frame" x="12" y="0.0" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DwD-R6-NRb">
+                                                    <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="DwD-R6-NRb" firstAttribute="top" secondItem="Fuf-2k-fDF" secondAttribute="top" id="LZY-da-F8U"/>
+                                            <constraint firstAttribute="bottom" secondItem="DwD-R6-NRb" secondAttribute="bottom" id="Nkr-iI-gdf"/>
+                                            <constraint firstItem="DwD-R6-NRb" firstAttribute="leading" secondItem="Fuf-2k-fDF" secondAttribute="leading" id="fVw-3z-9WI"/>
+                                            <constraint firstAttribute="trailing" secondItem="DwD-R6-NRb" secondAttribute="trailing" id="sl2-J1-CvE"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="DwD-R6-NRb" id="VHr-eg-LGT"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="xMb-C7-w2e"/>
+                                </connections>
+                            </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="nae-8q-lxv">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Saf-Gu-Qf2" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="CKK-UD-wGi"/>
+                            <constraint firstItem="Saf-Gu-Qf2" firstAttribute="top" secondItem="vjG-tX-4SN" secondAttribute="bottom" id="DXd-ra-Hjn"/>
+                            <constraint firstItem="vjG-tX-4SN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="EPt-rO-Y6P"/>
+                            <constraint firstItem="vjG-tX-4SN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FhZ-XW-GUt"/>
+                            <constraint firstItem="vjG-tX-4SN" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="GFg-i7-MfY"/>
+                            <constraint firstItem="Saf-Gu-Qf2" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="OBb-27-yqw"/>
+                            <constraint firstItem="Saf-Gu-Qf2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="VEb-ng-uhJ"/>
+                            <constraint firstItem="nae-8q-lxv" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ci6-mr-9Wz"/>
+                            <constraint firstItem="nae-8q-lxv" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="g0y-iw-Q30"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="activityView" destination="nae-8q-lxv" id="PzZ-52-xj7"/>
+                        <outlet property="collectionView" destination="Saf-Gu-Qf2" id="ElN-DO-lyt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="137.94642857142856"/>
+        </scene>
+    </scenes>
+</document>

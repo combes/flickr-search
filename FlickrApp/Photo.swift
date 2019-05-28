@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct PhotoData: Codable {
-    let photos: Photos
-}
-
 struct Photos: Codable {
+    let perpage: Int
+    let pages: Int
     let photo: [Photo]
+    let total: String
+    let page: Int
 }
 
 struct Photo: Codable {

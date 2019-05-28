@@ -8,38 +8,68 @@
 
 import UIKit
 
-// TODO: Add pagination
 class ViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
     
-    let service = FlickrService()
-    var photos: [Photo]? {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
+    private var viewModel: PhotosViewModel!
+    private var searchText = ""
+    private let itemSpacing: CGFloat = 4
+    private lazy var itemSize = view.bounds.width / 3 - itemSpacing
+    private var lastContentOffset: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.delegate = self
+        
+        viewModel = PhotosViewModel(delegate: self)
         
         setupCollectionLayout()
     }
 }
 
-private extension ViewController {
-    func setupCollectionLayout() {
-        let spacing: CGFloat = 4
+extension ViewController: UICollectionViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+        guard scrollView.isDragging else {
+            return
+        }
+        
+        if abs(lastContentOffset - scrollView.contentOffset.y) > 20 {
+            lastContentOffset = scrollView.contentOffset.y;
+        }
+        
+        if lastContentOffset < scrollView.contentOffset.y {
+            let dataOffset = collectionView.contentSize.height - collectionView.contentOffset.y - collectionView.bounds.height
+            
+            if dataOffset < itemSize {
+                viewModel.fetchPhotos(query: searchText)
+            }
+        }
+    }    
+}
+
+private extension ViewController {
+    func setupCollectionLayout() {                
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
-        let itemSize = view.bounds.width / 3 - spacing
+        layout.sectionInset = UIEdgeInsets(top: 0, left: itemSpacing, bottom: 0, right: itemSpacing)        
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
         layout.minimumInteritemSpacing = 1
         layout.minimumLineSpacing = 1
         collectionView.collectionViewLayout = layout
     }
+    
+    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return indexPath.row >= viewModel.currentCount
+    }
+    
+    func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
+        let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems 
+        let indexPathsIntersection = Set(indexPathsForVisibleItems).intersection(indexPaths)
+        return Array(indexPathsIntersection)
+    }    
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -47,8 +77,8 @@ extension ViewController: UICollectionViewDataSource {
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.className, for: indexPath) as? PhotoCollectionViewCell {
             
-            if let photo = photos?[indexPath.row] {
-                cell.configure(path: photo.url_t)
+            if let photo = viewModel.photo(at: indexPath.row) {
+                cell.configure(photo: photo)
             }
             
             return cell
@@ -58,7 +88,7 @@ extension ViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos?.count ?? 0
+        return viewModel.currentCount
     }
 }
 
@@ -66,19 +96,34 @@ extension ViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
         
-        activityView.startAnimating()
+        searchText = text
+        fetchData()        
+    }    
+    
+    func fetchData() {
+        activityView.startAnimating()        
+        viewModel.fetchPhotos(query: searchText)        
+    }
+}
+
+extension ViewController: PhotosViewModelDelegate {
+    func onFetchCompleted(with pathsToReload: [IndexPath]?) {
         
-        service.search(query: text) { [weak self] (photos, error) in
-            
-            DispatchQueue.main.async {
-                self?.activityView.stopAnimating()
-                
-                if let error = error {
-                    print("No items found \(error.localizedDescription)")
-                } else {
-                    self?.photos = photos
-                }
-            }
-        }        
+        activityView.stopAnimating()
+        
+        guard let newIndexPathsToReload = pathsToReload else {
+            collectionView.reloadData()
+            return
+        }
+        
+        collectionView.insertItems(at: newIndexPathsToReload)
+    }
+    
+    func onFetchFailed(with reason: String) {
+        activityView.stopAnimating()
+        
+        let alertController = UIAlertController(title: "Warning", message: reason, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alertController, animated: true)
     }
 }

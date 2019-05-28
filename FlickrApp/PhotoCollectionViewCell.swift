@@ -16,9 +16,9 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         imageView.image = nil
     }
     
-    func configure(path: String) {
-        guard let url = URL(string: path) else {
-            print("Could not create URL from \(path)")
+    func configure(photo: Photo) {
+        guard let url = URL(string: photo.url_t) else {
+            print("Could not create URL from \(photo.url_t))")
             return
         } 
         

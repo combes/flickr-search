@@ -97,6 +97,9 @@ extension ViewController: UISearchBarDelegate {
         guard let text = searchBar.text else { return }
         
         searchText = text
+        
+        searchBar.resignFirstResponder()
+        
         fetchData()        
     }    
     

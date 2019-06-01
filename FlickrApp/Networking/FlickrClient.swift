@@ -15,6 +15,7 @@ final class FlickrClient {
     let photosPerPage = 100
     let session: URLSession
     var task: URLSessionDataTask?
+    let cache = DataCache<PagedSearchResponse>()
 
     init(session: URLSession = URLSession.shared) {
         self.session = session
@@ -28,9 +29,21 @@ final class FlickrClient {
 
         let url = buildUrl(searchQuery: query, page: page)
         
+        if let pageObject = cache.load(path: url.absoluteString) {
+            debugPrint("Fetched page \(page) from cache")
+        
+            // FIXME: Crash occurs if we simply call "completion".
+            // We are still on the main thread here, whereas the data task below is on a separate thread.
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { 
+                completion(Result.success(pageObject))
+            }
+            
+            return
+        }
+        
         debugPrint("Fetching page \(page)")
                 
-        task = session.dataTask(with: url, completionHandler: { data, response, error in
+        task = session.dataTask(with: url, completionHandler: { [weak self] data, response, error in
         
             guard let httpResponse = response as? HTTPURLResponse,
                 httpResponse.hasSuccessStatusCode,
@@ -45,6 +58,7 @@ final class FlickrClient {
 //                debugPrint(json)
 
                 let decodeResponse = try JSONDecoder().decode(PagedSearchResponse.self, from: data)
+                self?.cache.store(path: url.absoluteString, object: decodeResponse)
                 completion(Result.success(decodeResponse))
             } catch let parsingError {
                 debugPrint("Failed to decode: \(parsingError.localizedDescription)")

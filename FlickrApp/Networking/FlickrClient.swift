@@ -14,18 +14,23 @@ final class FlickrClient {
     let apiKey = "7ba13e8ee4ffb30beba4e6357f708ea3"
     let photosPerPage = 100
     let session: URLSession
-    
+    var task: URLSessionDataTask?
+
     init(session: URLSession = URLSession.shared) {
         self.session = session
     }
 
     func search(query: String, page: Int, completion: @escaping (Result<PagedSearchResponse, ResponseError>) -> Void) {
 
+        if let dataTask = task {
+            dataTask.cancel()
+        } 
+
         let url = buildUrl(searchQuery: query, page: page)
         
         debugPrint("Fetching page \(page)")
-        
-        session.dataTask(with: url, completionHandler: { data, response, error in
+                
+        task = session.dataTask(with: url, completionHandler: { data, response, error in
         
             guard let httpResponse = response as? HTTPURLResponse,
                 httpResponse.hasSuccessStatusCode,
@@ -46,13 +51,15 @@ final class FlickrClient {
                 completion(Result.failure(ResponseError.decoding))
             }
             
-        }).resume()
+        })
+        
+        task?.resume()        
     }
 }
 
 extension FlickrClient {
     private func buildUrl(searchQuery: String, page: Int = 1) -> URL {
-        var components = URLComponents(string: "\(basePath)&api_key=\(apiKey)&format=json&safe_search=1&extras=url_t&nojsoncallback=1")
+        var components = URLComponents(string: "\(basePath)&api_key=\(apiKey)&format=json&safe_search=1&extras=url_t&nojsoncallback=1&page=\(page)")
         var currentQueryItems = components?.queryItems ?? []
         
         currentQueryItems.append(URLQueryItem(name: "text", value: searchQuery))

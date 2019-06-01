@@ -24,9 +24,7 @@ final class PhotosViewModel {
         willSet {
             if newValue != query {
                 // Reset on new queries
-                currentPage = 1
-                total = 0
-                photos = []                
+                reset()
             }
         }
     }
@@ -46,6 +44,12 @@ final class PhotosViewModel {
             return photos[index]
         }
         return nil
+    }
+    
+    func reset() {
+        currentPage = 1
+        total = 0
+        photos = []                
     }
     
     func fetchPhotos(query: String) {

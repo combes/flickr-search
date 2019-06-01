@@ -14,7 +14,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var activityView: UIActivityIndicatorView!
     
     private var viewModel: PhotosViewModel!
-    private var searchText = ""
+    private var searchText = "" {
+        didSet {
+            viewModel.reset()
+            collectionView.reloadData()
+            fetchData()
+        }
+    }
     private let itemSpacing: CGFloat = 4
     private lazy var itemSize = view.bounds.width / 3 - itemSpacing
     private var lastContentOffset: CGFloat = 0
@@ -99,11 +105,13 @@ extension ViewController: UISearchBarDelegate {
         searchText = text
         
         searchBar.resignFirstResponder()
-        
-        fetchData()        
     }    
     
-    func fetchData() {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchText = searchText
+    }
+    
+    private func fetchData() {
         activityView.startAnimating()        
         viewModel.fetchPhotos(query: searchText)        
     }
